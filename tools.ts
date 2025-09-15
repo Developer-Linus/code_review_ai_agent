@@ -43,7 +43,6 @@ async function generateCommitMessage({rootDir}: CommitMessageInput){
     // Ask LLM to generate a professional commit message
     const {text} = await generateText({
         model: google("models/gemini-2.5-flash"),
-        system: "You are a professional engineer. Only output a Conventional Commit message.",
         prompt: commitMessagePrompt(changesSummary)
     })
 
@@ -54,7 +53,7 @@ async function generateCommitMessage({rootDir}: CommitMessageInput){
     const parsed = parser.parse(rawMessage)
 
     if(!parsed.type || !parsed.subject){
-        throw new Error("Generated commit message is not a valid Conventional Commit")
+        throw new Error(`Generated commit message is not a valid Conventional Commit: "${rawMessage}"`)
     }
 
     // Return the clean commit message
